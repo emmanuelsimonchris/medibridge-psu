@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MediBridge PSU — Simplifying employee healthcare for PSUs</title>
+<style>
+  :root{
+    --navy: #0d2b52;
+    --navy-deep: #0a1f3d;
+    --teal: #14b8a6;
+    --teal-dark: #0d9488;
+    --ink: #1c2b3a;
+    --muted: #5b6b7c;
+    --line: #e6eaef;
+    --bg-soft: #f4f7f9;
+    --white: #ffffff;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 20px 50px -20px rgba(13,43,82,0.25);
+    --font-head: "Poppins", "Segoe UI", Arial, sans-serif;
+    --font-body: "Inter", "Segoe UI", Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--font-body);
+    color:var(--ink);
+    background:var(--white);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{text-decoration:none;color:inherit;}
+  img,video{max-width:100%;display:block;}
+  .container{
+    max-width:1200px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 32px;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:var(--font-head);
+    font-weight:700;
+    font-size:20px;
+    color:var(--navy);
+  }
+  .logo .mark{
+    width:34px;height:34px;
+    border-radius:10px;
+    background:linear-gradient(135deg, var(--teal), var(--navy));
+    display:flex;align-items:center;justify-content:center;
+  }
+  .logo .mark svg{width:18px;height:18px;}
+  .logo .accent{color:var(--teal-dark);}
+  nav.links{
+    display:flex;
+    align-items:center;
+    gap:36px;
+  }
+  nav.links a{
+    font-size:15px;
+    font-weight:500;
+    color:var(--ink);
+    transition:color .15s ease;
+  }
+  nav.links a:hover{color:var(--teal-dark);}
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:15px;
+    padding:12px 22px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn-primary{
+    background:var(--navy);
+    color:#fff;
+  }
+  .btn-primary:hover{background:var(--navy-deep); transform:translateY(-1px);}
+  .btn-ghost{
+    background:transparent;
+    color:var(--navy);
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .btn-ghost .play{
+    width:26px;height:26px;
+    border-radius:50%;
+    border:1.5px solid var(--navy);
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s ease, color .15s ease;
+  }
+  .btn-ghost:hover .play{background:var(--navy); color:#fff;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:88px 0 100px;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:center;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--teal-dark);
+    background:rgba(20,184,166,0.1);
+    padding:6px 14px;
+    border-radius:999px;
+    margin-bottom:22px;
+  }
+  h1{
+    font-family:var(--font-head);
+    font-weight:700;
+    font-size:52px;
+    line-height:1.12;
+    letter-spacing:-0.01em;
+    margin:0 0 22px;
+    color:var(--navy);
+  }
+  h1 .hl{color:var(--teal);}
+  .hero p.lead{
+    font-size:18px;
+    line-height:1.6;
+    color:var(--muted);
+    max-width:480px;
+    margin:0 0 34px;
+  }
+  .hero-cta{
+    display:flex;
+    align-items:center;
+    gap:28px;
+  }
+
+  /* device mockup with video */
+  .device-wrap{
+    position:relative;
+  }
+  .laptop{
+    background:#0e1b2b;
+    border-radius:14px 14px 4px 4px;
+    padding:10px 10px 0;
+    box-shadow:var(--shadow);
+  }
+  .laptop .bar{
+    display:flex;
+    gap:6px;
+    padding:6px 4px 10px;
+  }
+  .laptop .bar span{
+    width:9px;height:9px;border-radius:50%;
+    background:#3b4a5e;
+  }
+  .laptop .screen{
+    border-radius:6px;
+    overflow:hidden;
+    background:#000;
+    aspect-ratio:16/10;
+  }
+  .laptop .screen video{
+    width:100%;height:100%;object-fit:cover;display:block;
+  }
+  .laptop-base{
+    height:14px;
+    background:linear-gradient(180deg,#cfd6dd,#aeb7c2);
+    border-radius:0 0 10px 10px;
+    margin:0 -6px;
+    position:relative;
+  }
+  .laptop-base::after{
+    content:"";
+    position:absolute;
+    left:50%;top:0;
+    transform:translateX(-50%);
+    width:70px;height:6px;
+    background:#8f99a6;
+    border-radius:0 0 6px 6px;
+  }
+
+  .phone{
+    position:absolute;
+    right:-18px;
+    bottom:-36px;
+    width:160px;
+    background:var(--navy);
+    border-radius:22px;
+    padding:10px;
+    box-shadow:0 18px 40px -14px rgba(13,43,82,0.5);
+    border:4px solid var(--navy-deep);
+  }
+  .phone .phone-head{
+    color:#fff;
+    font-size:11px;
+    font-weight:600;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:2px 2px 8px;
+  }
+  .phone .card{
+    background:linear-gradient(135deg,var(--teal-dark),var(--navy));
+    border-radius:10px;
+    padding:10px;
+    color:#fff;
+    font-size:10px;
+  }
+  .phone .card .top{display:flex;align-items:center;gap:5px;font-weight:700;margin-bottom:10px;}
+  .phone .card .name{font-weight:700;font-size:11px;margin-bottom:2px;}
+  .phone .card .meta{opacity:.75;font-size:9px;display:flex;justify-content:space-between;margin-top:8px;}
+  .phone .qa-label{color:#c9d3de;font-size:9px;margin:10px 2px 6px;}
+  .phone .qa-grid{display:flex;gap:6px;}
+  .phone .qa-grid div{
+    flex:1;
+    background:rgba(255,255,255,0.06);
+    border-radius:8px;
+    padding:8px 4px;
+    text-align:center;
+    color:#e7ecf1;
+    font-size:8px;
+  }
+  .phone .qa-grid svg{width:14px;height:14px;margin:0 auto 4px;display:block;color:var(--teal);}
+
+  /* ---------- Features ---------- */
+  .features{
+    padding:36px 0 70px;
+  }
+  .features-grid{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:20px;
+    text-align:center;
+  }
+  .feature-item .icon{
+    width:56px;height:56px;
+    margin:0 auto 14px;
+    border-radius:16px;
+    background:var(--bg-soft);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--teal-dark);
+    transition:transform .15s ease, background .15s ease;
+  }
+  .feature-item:hover .icon{background:rgba(20,184,166,0.12); transform:translateY(-3px);}
+  .feature-item .icon svg{width:26px;height:26px;}
+  .feature-item p{
+    margin:0;
+    font-size:14px;
+    font-weight:600;
+    color:var(--navy);
+    line-height:1.4;
+  }
+
+  /* ---------- Early access ---------- */
+  .early{
+    background:var(--bg-soft);
+    border-radius:24px;
+    padding:56px;
+    margin:0 auto 70px;
+    max-width:1200px;
+  }
+  .early-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:center;
+  }
+  .early .eyebrow{background:rgba(20,184,166,0.14);}
+  .early h2{
+    font-family:var(--font-head);
+    font-size:32px;
+    font-weight:700;
+    color:var(--navy);
+    line-height:1.25;
+    margin:0 0 22px;
+  }
+  .checklist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;}
+  .checklist li{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:15px;
+    color:var(--ink);
+    font-weight:500;
+  }
+  .checklist svg{
+    width:20px;height:20px;
+    color:var(--teal-dark);
+    flex:none;
+  }
+  form.demo-form{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  form.demo-form input{
+    width:100%;
+    padding:15px 18px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-family:var(--font-body);
+    font-size:15px;
+    color:var(--ink);
+    outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  form.demo-form input:focus{
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px rgba(20,184,166,0.15);
+  }
+  form.demo-form .btn-primary{
+    margin-top:6px;
+    padding:15px 22px;
+    font-size:15px;
+    border-radius:10px;
+  }
+  .form-note{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:2px;
+    min-height:18px;
+  }
+  .form-note.success{color:var(--teal-dark); font-weight:600;}
+  .form-note.error{color:#c0392b; font-weight:600;}
+
+  /* ---------- Footer ---------- */
+  footer{
+    padding:0 0 60px;
+    text-align:center;
+  }
+  .trust{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-size:14px;
+    color:var(--muted);
+  }
+  .trust svg{width:16px;height:16px;color:var(--muted);}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 980px){
+    nav.links{display:none;}
+    .hero-grid, .early-grid{grid-template-columns:1fr;}
+    h1{font-size:38px;}
+    .features-grid{grid-template-columns:repeat(3,1fr);}
+    .phone{position:static;width:200px;margin:24px auto 0;}
+    .early{padding:36px 22px;border-radius:16px;}
+  }
+  @media (max-width:560px){
+    .features-grid{grid-template-columns:repeat(2,1fr);}
+    .container{padding:0 20px;}
+    .nav{padding:16px 20px;}
+    h1{font-size:32px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      </span>
+      MediBridge <span class="accent">PSU</span>
+    </div>
+    <nav class="links">
+      <a href="#features">Features</a>
+      <a href="#psus">For PSUs</a>
+      <a href="#hospitals">For Hospitals</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a href="#early-access" class="btn btn-primary">Request a Demo</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <h1>Simplifying<br/>employee healthcare<br/>for <span class="hl">PSUs.</span></h1>
+      <p class="lead">One platform to manage appointments, insurance, claims and communications—end to end.</p>
+      <div class="hero-cta">
+        <a href="#early-access" class="btn btn-primary">Request a Demo</a>
+        <a href="#demo-video" class="btn-ghost" id="watchLink">
+          <span class="play">
+            <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+          See How It Works
+        </a>
+      </div>
+    </div>
+
+    <div class="device-wrap" id="demo-video">
+      <div class="laptop">
+        <div class="bar"><span></span><span></span><span></span></div>
+        <div class="screen">
+          <video id="demoVideo" src="demo.mp4" muted loop playsinline autoplay></video>
+        </div>
+      </div>
+      <div class="laptop-base"></div>
+
+      <div class="phone">
+        <div class="phone-head">
+          <span>My Card</span>
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#fff" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/></svg>
+        </div>
+        <div class="card">
+          <div class="top">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="#fff"><path d="M12 2 3 6v6c0 5 3.8 8.4 9 10 5.2-1.6 9-5 9-10V6z"/></svg>
+            MediBridge PSU
+          </div>
+          <div class="name">Ravi Kumar</div>
+          <div class="meta"><span>Emp ID: MMOC1234</span><span>Valid Till 31/12/2024</span></div>
+        </div>
+        <div class="qa-label">Quick Actions</div>
+        <div class="qa-grid">
+          <div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Book<br/>Appointment
+          </div>
+          <div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+            Check<br/>Claim
+          </div>
+          <div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 6v6c0 5 3.8 8.4 9 10 5.2-1.6 9-5 9-10V6z"/></svg>
+            Insurance<br/>Status
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="container features-grid">
+    <div class="feature-item">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+      <p>Book<br/>Appointments</p>
+    </div>
+    <div class="feature-item">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 6v6c0 5 3.8 8.4 9 10 5.2-1.6 9-5 9-10V6z"/><path d="m9 12 2 2 4-4"/></svg></div>
+      <p>Insurance<br/>Verification</p>
+    </div>
+    <div class="feature-item">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><circle cx="11" cy="16" r="2"/><path d="m14.5 19.5-2-2"/></svg></div>
+      <p>Claim<br/>Tracking</p>
+    </div>
+    <div class="feature-item">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+      <p>Digital<br/>Medical Card</p>
+    </div>
+    <div class="feature-item">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20V10M10 20V4M17 20v-6"/></svg></div>
+      <p>HR<br/>Dashboard</p>
+    </div>
+    <div class="feature-item">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+      <p>Alerts &amp;<br/>Notifications</p>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="early" id="early-access">
+    <div class="early-grid">
+      <div>
+        <span class="eyebrow">Early Access</span>
+        <h2>Be among the first<br/>to experience MediBridge PSU</h2>
+        <ul class="checklist">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Built for PSUs and large organizations</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Transparent. Secure. Easy to use.</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Launching soon. Join the waitlist.</li>
+        </ul>
+      </div>
+
+      <div>
+        <form class="demo-form" id="demoForm">
+          <input type="text" id="fullName" placeholder="Full Name" required />
+          <input type="email" id="workEmail" placeholder="Work Email" required />
+          <input type="text" id="organization" placeholder="Organization" required />
+          <input type="text" id="designation" placeholder="Designation" required />
+          <button type="submit" class="btn btn-primary">Request a Demo</button>
+          <div class="form-note" id="formNote"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="trust">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    Secure &nbsp;•&nbsp; Private &nbsp;•&nbsp; Built for Healthcare
+  </div>
+</footer>
+
+<script>
+  /* ===================================================================
+     GOOGLE FORMS CONNECTION
+     ---------------------------------------------------------------
+     This form submits straight into a Google Form response sheet.
+     To wire it up to YOUR Google Form:
+
+     1. Create a Google Form with 4 short-answer questions, in this
+        order (names don't have to match, just the order/type):
+           Full Name | Work Email | Organization | Designation
+
+     2. Click the three-dot menu on the form -> "Get pre-filled link".
+        Fill dummy text into each field and click "Get link".
+
+     3. Open that pre-filled link. The URL will look like:
+        https://docs.google.com/forms/d/e/XXXXXXXXXXXXXXXXXXXXX/viewform?usp=pp_url&entry.111111=Test&entry.222222=Test&entry.333333=Test&entry.444444=Test
+
+     4. Copy the long ID after /d/e/ and before /viewform — that's
+        your FORM_ID below.
+
+     5. Copy each "entry.XXXXXXX" number and paste it into the
+        matching ENTRY_ID field below (match by the order you filled
+        them in step 2).
+
+     6. Replace the placeholders below and you're done — submissions
+        will appear as new rows in the Form's linked Google Sheet.
+     =================================================================== */
+
+  const GOOGLE_FORM_ID = "1FAIpQLSdOF7gU63MZWiVPNyCf_tPrwvbCJvPsGPfyeqgssMTMXDt4Gw";
+  const ENTRY_IDS = {
+    fullName:     "entry.715624784",
+    workEmail:    "entry.1389794925",
+    organization: "entry.452111564",
+    designation:  "entry.1846690145"
+  };
+
+  const form = document.getElementById("demoForm");
+  const note = document.getElementById("formNote");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    if (GOOGLE_FORM_ID.startsWith("YOUR_GOOGLE_FORM_ID")) {
+      note.textContent = "Form not connected yet — add your Google Form ID and entry IDs in the script.";
+      note.className = "form-note error";
+      return;
+    }
+
+    const data = new FormData();
+    data.append(ENTRY_IDS.fullName, document.getElementById("fullName").value);
+    data.append(ENTRY_IDS.workEmail, document.getElementById("workEmail").value);
+    data.append(ENTRY_IDS.organization, document.getElementById("organization").value);
+    data.append(ENTRY_IDS.designation, document.getElementById("designation").value);
+
+    const actionUrl = `https://docs.google.com/forms/d/e/${GOOGLE_FORM_ID}/formResponse`;
+
+    // Google Forms doesn't send CORS headers, so the response is opaque.
+    // "no-cors" still delivers the POST — we just can't read the result,
+    // so we optimistically show a success message.
+    fetch(actionUrl, {
+      method: "POST",
+      mode: "no-cors",
+      body: data
+    }).then(() => {
+      note.textContent = "Thanks! We'll be in touch shortly.";
+      note.className = "form-note success";
+      form.reset();
+    }).catch(() => {
+      note.textContent = "Something went wrong. Please try again.";
+      note.className = "form-note error";
+    });
+  });
+
+  // "See How It Works" scrolls to the demo video and makes sure it's playing (unmuted on click)
+  document.getElementById("watchLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    const vid = document.getElementById("demoVideo");
+    document.getElementById("demo-video").scrollIntoView({ behavior: "smooth", block: "center" });
+    vid.muted = false;
+    vid.play();
+  });
+</script>
+
+</body>
+</html>
